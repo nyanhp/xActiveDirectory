@@ -62,12 +62,12 @@ try
 
             It 'Calls "Assert-Module" to check "ADDSDeployment" module is installed' {
                 Mock -CommandName Get-ADDomain -MockWith { 
-                    [psobject]@{
+                    return ([psobject]@{
                         Forest     = $correctDomainName
                         DomainMode = $mgmtDomainMode
-                    }
+                    })
                 }
-                Mock -CommandName Get-ADForest -MockWith { [psobject]@{ForestMode = $mgmtForestMode} }
+                Mock -CommandName Get-ADForest -MockWith { return ([psobject]@{ForestMode = $mgmtForestMode}) }
 
                 $result = Get-TargetResource @testDefaultParams -DomainName $correctDomainName;
 
@@ -75,14 +75,13 @@ try
             }
 
             It 'Returns "System.Collections.Hashtable" object type' {
-                Mock -CommandName Get-ADDomain {
-                    [psobject]@{
+                Mock -CommandName Get-ADDomain -MockWith { 
+                    return ([psobject]@{
                         Forest     = $correctDomainName
                         DomainMode = $mgmtDomainMode
-                    }
+                    })
                 }
-
-                Mock -CommandName Get-ADForest -MockWith { [psobject]@{ForestMode = $mgmtForestMode} }
+                Mock -CommandName Get-ADForest -MockWith { return ([psobject]@{ForestMode = $mgmtForestMode}) }
 
                 $result = Get-TargetResource @testDefaultParams -DomainName $correctDomainName;
 
