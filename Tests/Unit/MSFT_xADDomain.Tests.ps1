@@ -35,7 +35,7 @@ try
     # The InModuleScope command allows you to perform white-box unit testing on the internal
     # (non-exported) code of a Script Module.
     InModuleScope $Global:DSCResourceName {
-
+ipmo ADDSDeployment,ActiveDirectory -ErrorAction SilentlyContinue
         #region Pester Test Initialization
 
         $correctDomainName = 'present.com';
