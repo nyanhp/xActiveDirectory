@@ -20,9 +20,24 @@ $TestEnvironment = Initialize-TestEnvironment `
     -TestType Unit
 #endregion
 
-function Invoke-TestSetup {
+function Invoke-TestSetup
+{
+   if (Get-MOdule -List ADDSDeployment)  { 
+        IMport-Module ADDSDeployment
+      
+       }
+       else
+       {
     Add-Type -Path (Join-Path -Path (Join-Path -Path (Join-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'Tests') -ChildPath 'Unit') -ChildPath 'Stubs') -ChildPath 'Microsoft.DirectoryServices.Deployment.Types.cs')
+       }
+
+       if(Get-module -list activedirectory) {
+           Import-Module ActiveDirectory
+       }
+       else
+       {
     Add-Type -Path (Join-Path -Path (Join-Path -Path (Join-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'Tests') -ChildPath 'Unit') -ChildPath 'Stubs') -ChildPath 'Microsoft.ActiveDirectory.Management.cs')
+       }
 }
 
 # Begin Testing
@@ -35,7 +50,7 @@ try
     # The InModuleScope command allows you to perform white-box unit testing on the internal
     # (non-exported) code of a Script Module.
     InModuleScope $Global:DSCResourceName {
-ipmo ADDSDeployment,ActiveDirectory -ErrorAction SilentlyContinue
+    ipmo ADDSDeployment,ActiveDirectory -ErrorAction SilentlyContinue
         #region Pester Test Initialization
 
         $correctDomainName = 'present.com';
